@@ -1,0 +1,41 @@
+# Django Country Detection by IP
+
+This Django project detects the user's country based on their public IP address using external APIs like ip-api or ipify. The country is then displayed on the website, alongside all available blog posts.
+
+## Features
+
+- Detects the user's country based on their public IP address.
+- Uses the ip-api or ipify API for country detection.
+- Displays blog posts from the database along with the detected country.
+
+## Setup Instructions
+
+Follow the steps below to set up this project locally.
+
+### Prerequisites
+
+Make sure you have the following installed on your machine:
+
+- Python 3.x 
+- Django
+- pip (Python package manager)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/abhayrathor12/Assignment.git
+cd your-project-directory
+
+# run this command to download the dependies
+pip install -r requirements.txt
+
+# run this command to create table in db
+python manage.py migrate
+
+
+### 2. Getting the Data from csv Run this command
+python manage.py import_blogs path_to_your_csv
+
+
+# run this command to run the app
+python manage.py runserver

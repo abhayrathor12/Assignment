@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static%}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Posts</title>
+    <!-- Add Bootstrap for optional styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Blog Posts</h1>
+        </header>
+
+        <div class="filter-container">
+            <span><strong>Detected Country:</strong> {{ country }}</span>
+
+          
+            <select id="country-filter" class="form-select">
+                <option value="All">All</option>
+                {% for post in blog_posts %}
+                    {% if post.country %}
+                        <option value="{{ post.country }}">{{ post.country }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="card-grid">
+            {% for post in blog_posts %}
+                <div class="card" data-country="{{ post.country }}">
+                    <div class="card-header">
+                        <h2>{{ post.title }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ post.content }}</p>
+                        <small><strong>Country:</strong> {{ post.country }}</small>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+        </div>
+
+        
+        
+    </div>
+
+    
+    <script>
+        document.getElementById('country-filter').addEventListener('change', function () {
+            const country = this.value;
+
+       
+            fetch(`/filter/?country=${country}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.querySelector('.card-grid');
+                    container.innerHTML = ''; 
+
+                   
+                    data.blog_posts.forEach(post => {
+                        const div = document.createElement('div');
+                        div.classList.add('card');
+                        div.innerHTML = `
+                            <div class="card-header">
+                                <h2>${post.title}</h2>
+                            </div>
+                            <div class="card-body">
+                                <p>${post.content}</p>
+                                <small><strong>Country:</strong> ${post.country}</small>
+                            </div>
+                            <div class="card-footer">
+                                <small>Posted on: ${post.date}</small>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(error => console.error('Error fetching posts:', error));
+        });
+    </script>
+
+ 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
